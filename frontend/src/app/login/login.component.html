@@ -5,16 +5,19 @@
 <!--      <mat-error>-->
 <!--        The username and password were not recognized-->
 <!--      </mat-error>-->
+      <p *ngIf="message" class="error-message">{{ message }}</p>
       <mat-form-field>
-        <input matInput placeholder="Username" required id="username" name="username"
-               formControlName="username" type="text">
+        <input matInput placeholder="Username" required id="username"
+               class="form-control"
+               formControlName="username"
+               type="text">
         <mat-error *ngIf="loginForm.get('username').invalid && loginForm.get('username').touched">
           Please provide a valid username
         </mat-error>
       </mat-form-field>
       <mat-form-field>
-        <input matInput placeholder="Password" name="password"
-               id="password"
+        <input matInput placeholder="Password" id="password"
+               class="form-control"
                formControlName="password"
                type="password">
         <mat-error *ngIf="loginForm.get('password').invalid && loginForm.get('password').touched">

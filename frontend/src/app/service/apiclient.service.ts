@@ -11,7 +11,7 @@ export class ApiclientService {
   constructor(private httpClient: HttpClient, private apollo: Apollo) { }
 
   login(username: string, password: string): Observable<any> {
-    this.apollo.watchQuery({
+    return this.apollo.watchQuery({
       query: gql`query Query($username: String!, $password: String!) {
                 login(username: $username, password: $password)
               }`,
@@ -20,7 +20,9 @@ export class ApiclientService {
         password
       },
     })
-      .valueChanges.pipe(map((result: any) => result.data.login));
+      .valueChanges.pipe(map((result: any) => {
+        return result.data.login
+      }));
   }
 
 

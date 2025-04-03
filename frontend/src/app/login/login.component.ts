@@ -7,6 +7,8 @@ import {NgIf} from '@angular/common';
 import {MatButtonModule} from '@angular/material/button';
 import {ApiclientService} from '../service/apiclient.service';
 import {response} from 'express';
+import {AuthService} from '../service/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -24,10 +26,19 @@ import {response} from 'express';
 })
 export class LoginComponent {
   loginForm: any
+  message: string = '';
 
-  constructor(private formBuilder: FormBuilder, private apiClient: ApiclientService) {}
+  constructor(private formBuilder: FormBuilder,
+              private apiClient: ApiclientService,
+              private authService: AuthService,
+              private router: Router) {}
 
   ngOnInit() {
+
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['']);
+    }
+
     this.loginForm = this.formBuilder.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required]],
@@ -35,14 +46,16 @@ export class LoginComponent {
   }
 
   submitForm(): void {
-    this.apiClient.login(this.loginForm.username, this.loginForm.password).subscribe(
+    this.apiClient.login(this.loginForm.get('username').value, this.loginForm.get('password').value).subscribe(
       {
         next: (response: any) => {
-          if (response.login == false) {
-            alert("Failed to login");
+          if (!response) {
+            this.message = "Invalid credentials.";
           }
           else {
-            alert(response.login);
+            this.authService.saveToken(response.token);
+            this.message = "Login successful!";
+            this.router.navigate(['']);
           }
         },
         error: (error: any) => {}
