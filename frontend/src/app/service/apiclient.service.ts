@@ -25,5 +25,24 @@ export class ApiclientService {
       }));
   }
 
+  signup(username: string, password: string, email: string): Observable<any> {
+    return this.apollo.mutate({
+      mutation: gql`mutation Mutation($username: String!, $email: String!, $password: String!) {
+                      signUp(username: $username, email: $email, password: $password) {
+                        _id
+                        username
+                        email
+                        password
+                        createdAt
+                        updatedAt
+                      }
+                    }`,
+      variables: {
+        username,
+        password,
+        email
+      }
+    }).pipe(map((result: any) => result.data))
+  }
 
 }
