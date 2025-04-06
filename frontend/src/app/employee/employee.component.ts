@@ -3,6 +3,7 @@ import {ApiclientService} from '../service/apiclient.service';
 import {MatTableModule} from '@angular/material/table';
 import {MatButtonModule} from '@angular/material/button';
 import {CurrencyPipe, DatePipe} from '@angular/common';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-employee',
@@ -10,7 +11,8 @@ import {CurrencyPipe, DatePipe} from '@angular/common';
     MatTableModule,
     MatButtonModule,
     DatePipe,
-    CurrencyPipe
+    CurrencyPipe,
+    RouterLink
   ],
   templateUrl: './employee.component.html',
   styleUrl: './employee.component.css'
@@ -35,10 +37,5 @@ export class EmployeeComponent {
   onDelete(employee: any): void {
     console.log('Delete clicked for:', employee);
     // Trigger delete mutation
-  }
-
-  onCreate(): void {
-    console.log('Create New Employee clicked');
-    // Navigate to create form or open dialog
   }
 }

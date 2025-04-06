@@ -71,4 +71,36 @@ export class ApiclientService {
       );
   }
 
+  addEmployee(employee: any): Observable<any> {
+    return this.apollo.mutate({
+      mutation: gql`
+      mutation Mutation(
+        $firstname: String!,
+        $lastname: String!,
+        $email: String!,
+        $gender: String!,
+        $designation: String!,
+        $salary: Float!,
+        $dateOfJoining: String!,
+        $department: String!,
+        $employeePhoto: String!
+      ) {
+        addEmployee(
+          firstname: $firstname,
+          lastname: $lastname,
+          email: $email,
+          gender: $gender,
+          designation: $designation,
+          salary: $salary,
+          date_of_joining: $dateOfJoining,
+          department: $department,
+          employee_photo: $employeePhoto
+        ) {
+          _id
+        }
+      }
+    `,
+      variables: employee
+    }).pipe(map((result: any) => result.data.addEmployee));
+  }
 }
