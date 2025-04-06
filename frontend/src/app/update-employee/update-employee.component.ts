@@ -10,6 +10,7 @@ import {MatNativeDateModule} from '@angular/material/core';
 import {MatButtonModule} from '@angular/material/button';
 import {ApiclientService} from '../service/apiclient.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {AuthService} from '../service/auth.service';
 
 @Component({
   selector: 'app-update-employee',
@@ -35,7 +36,8 @@ export class UpdateEmployeeComponent {
     private fb: FormBuilder,
     private apiClient: ApiclientService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.employeeForm = this.fb.group({
       firstname: ['', Validators.required],
@@ -54,6 +56,9 @@ export class UpdateEmployeeComponent {
   message = '';
 
   ngOnInit() {
+    if (!this.authService.isAuthenticated()) {
+      this.router.navigate(['']);
+    }
     this.id = this.route.snapshot.paramMap.get('id') || '';
     this.apiClient.getEmployeeById(this.id).subscribe({
       next: (data) => {

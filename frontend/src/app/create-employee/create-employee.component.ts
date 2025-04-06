@@ -10,6 +10,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSelectModule} from '@angular/material/select';
 import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
+import {AuthService} from '../service/auth.service';
 
 @Component({
   selector: 'app-create-employee',
@@ -34,7 +35,8 @@ export class CreateEmployeeComponent {
   constructor(
     private fb: FormBuilder,
     private apiClient: ApiclientService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.employeeForm = this.fb.group({
       firstname: ['', Validators.required],
@@ -47,6 +49,12 @@ export class CreateEmployeeComponent {
       department: ['', Validators.required],
       employeePhoto: ['', Validators.required]
     });
+  }
+
+  ngOnInit() {
+    if (!this.authService.isAuthenticated()) {
+      this.router.navigate(['']);
+    }
   }
 
   onSubmit() {

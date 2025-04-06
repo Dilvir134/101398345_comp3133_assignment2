@@ -4,6 +4,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatButtonModule} from '@angular/material/button';
 import {CurrencyPipe, DatePipe, NgIf} from '@angular/common';
 import {Router, RouterLink} from '@angular/router';
+import {AuthService} from '../service/auth.service';
 
 @Component({
   selector: 'app-employee',
@@ -23,10 +24,15 @@ export class EmployeeComponent {
   displayedColumns: string[] = ['firstname', 'lastname', 'email', 'gender', 'designation', 'salary', 'department', 'doj', 'actions'];
   message = '';
 
-  constructor(private apiClient: ApiclientService, private router: Router, private cdr: ChangeDetectorRef) {}
+  constructor(private apiClient: ApiclientService, private router: Router, private cdr: ChangeDetectorRef, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.fetchEmployees();
+    if (this.authService.isAuthenticated()) {
+      this.fetchEmployees();
+    }
+    else {
+      this.router.navigate(['']);
+    }
   }
 
   fetchEmployees() {
