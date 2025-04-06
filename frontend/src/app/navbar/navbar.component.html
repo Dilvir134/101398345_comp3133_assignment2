@@ -1,1 +1,13 @@
-<p>navbar works!</p>
+<mat-toolbar color="primary">
+  <span style="flex: 1 1 auto;">My App</span>
+
+  <ng-container *ngIf="!auth.isAuthenticated()">
+    <button mat-button routerLink="/signup">Signup</button>
+    <button mat-button routerLink="/login">Login</button>
+  </ng-container>
+
+  <ng-container *ngIf="auth.isAuthenticated()">
+    <button mat-button routerLink="/employees">Employees</button>
+    <button mat-button (click)="logout()">Logout</button>
+  </ng-container>
+</mat-toolbar>
