@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import {ChangeDetectorRef, Component} from '@angular/core';
 import {ApiclientService} from '../service/apiclient.service';
 import {MatTableModule} from '@angular/material/table';
 import {MatButtonModule} from '@angular/material/button';
-import {CurrencyPipe, DatePipe} from '@angular/common';
+import {CurrencyPipe, DatePipe, NgIf} from '@angular/common';
 import {Router, RouterLink} from '@angular/router';
 
 @Component({
@@ -12,7 +12,8 @@ import {Router, RouterLink} from '@angular/router';
     MatButtonModule,
     DatePipe,
     CurrencyPipe,
-    RouterLink
+    RouterLink,
+    NgIf
   ],
   templateUrl: './employee.component.html',
   styleUrl: './employee.component.css'
@@ -20,12 +21,23 @@ import {Router, RouterLink} from '@angular/router';
 export class EmployeeComponent {
   employees: any[] = [];
   displayedColumns: string[] = ['firstname', 'lastname', 'email', 'gender', 'designation', 'salary', 'department', 'doj', 'actions'];
+  message = '';
 
-  constructor(private apiClient: ApiclientService, private router: Router) {}
+  constructor(private apiClient: ApiclientService, private router: Router, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.apiClient.getAllEmployees().subscribe(data => {
-      this.employees = data;
+    this.fetchEmployees();
+  }
+
+  fetchEmployees() {
+    this.apiClient.getAllEmployees().subscribe({
+      next: (data) => {
+        this.employees = data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.message = 'Failed to load employees';
+      }
     });
   }
 
@@ -33,8 +45,19 @@ export class EmployeeComponent {
     this.router.navigate(['/employees/update/' + employee_id])
   }
 
-  onDelete(employee: any): void {
-    console.log('Delete clicked for:', employee);
-    // Trigger delete mutation
+  onDelete(employee_id: any): void {
+    const confirmDelete = confirm('Are you sure you want to delete this employee?');
+    if (confirmDelete) {
+      this.apiClient.deleteEmployee(employee_id).subscribe({
+        next: () => {
+          this.fetchEmployees();  // Reload the employee list after deletion
+          this.message = 'Employee deleted successfully!';
+        },
+        error: (err) => {
+          this.message = 'Failed to delete employee';
+        }
+      });
+    }
   }
+
 }

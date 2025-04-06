@@ -159,4 +159,18 @@ export class ApiclientService {
     }).pipe(map((res: any) => res.data));
   }
 
+  deleteEmployee(id: string): Observable<any> {
+    return this.apollo.mutate({
+      mutation: gql`
+        mutation Mutation($id: ID!) {
+          deleteEmployee(_id: $id) {
+            _id
+          }
+        }
+      `,
+      variables: { id },
+    }).pipe(
+      map((response: any) => response.data.deleteEmployee)
+    );
+  }
 }
