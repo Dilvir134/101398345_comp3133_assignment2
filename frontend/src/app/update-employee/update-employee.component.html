@@ -1,0 +1,75 @@
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+      <h2>Update Employee</h2>
+      <p *ngIf="message" class="error-message">{{ message }}</p>
+
+      <!-- First Name -->
+      <mat-form-field class="full-width">
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstname" />
+        <mat-error *ngIf="employeeForm.get('firstname')?.invalid">Required</mat-error>
+      </mat-form-field>
+
+      <!-- Last Name -->
+      <mat-form-field class="full-width">
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastname" />
+        <mat-error *ngIf="employeeForm.get('lastname')?.invalid">Required</mat-error>
+      </mat-form-field>
+
+      <!-- Gender -->
+      <mat-form-field class="full-width">
+        <mat-label>Gender</mat-label>
+        <mat-select formControlName="gender">
+          <mat-option value="Male">Male</mat-option>
+          <mat-option value="Female">Female</mat-option>
+          <mat-option value="Other">Other</mat-option>
+        </mat-select>
+        <mat-error *ngIf="employeeForm.get('gender')?.invalid">Required</mat-error>
+      </mat-form-field>
+
+      <!-- Designation -->
+      <mat-form-field class="full-width">
+        <mat-label>Designation</mat-label>
+        <input matInput formControlName="designation" />
+        <mat-error *ngIf="employeeForm.get('designation')?.invalid">Required</mat-error>
+      </mat-form-field>
+
+      <!-- Salary -->
+      <mat-form-field class="full-width">
+        <mat-label>Salary</mat-label>
+        <input matInput type="number" formControlName="salary" />
+        <mat-error *ngIf="employeeForm.get('salary')?.invalid">Required & must be a positive number</mat-error>
+      </mat-form-field>
+
+      <!-- Date of Joining -->
+      <mat-form-field class="full-width">
+        <mat-label>Date of Joining</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dateOfJoining" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="employeeForm.get('dateOfJoining')?.invalid">Required</mat-error>
+      </mat-form-field>
+
+      <!-- Department -->
+      <mat-form-field class="full-width">
+        <mat-label>Department</mat-label>
+        <input matInput formControlName="department" />
+        <mat-error *ngIf="employeeForm.get('department')?.invalid">Required</mat-error>
+      </mat-form-field>
+
+      <!-- Employee Photo URL -->
+      <mat-form-field class="full-width">
+        <mat-label>Employee Photo URL</mat-label>
+        <input matInput formControlName="employeePhoto" />
+        <mat-error *ngIf="employeeForm.get('employeePhoto')?.invalid">Required</mat-error>
+      </mat-form-field>
+
+      <!-- Submit Button -->
+      <button mat-raised-button color="primary" type="submit">
+        Update
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>

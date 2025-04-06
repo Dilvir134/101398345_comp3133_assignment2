@@ -3,7 +3,7 @@ import {ApiclientService} from '../service/apiclient.service';
 import {MatTableModule} from '@angular/material/table';
 import {MatButtonModule} from '@angular/material/button';
 import {CurrencyPipe, DatePipe} from '@angular/common';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-employee',
@@ -21,7 +21,7 @@ export class EmployeeComponent {
   employees: any[] = [];
   displayedColumns: string[] = ['firstname', 'lastname', 'email', 'gender', 'designation', 'salary', 'department', 'doj', 'actions'];
 
-  constructor(private apiClient: ApiclientService) {}
+  constructor(private apiClient: ApiclientService, private router: Router) {}
 
   ngOnInit(): void {
     this.apiClient.getAllEmployees().subscribe(data => {
@@ -29,9 +29,8 @@ export class EmployeeComponent {
     });
   }
 
-  onUpdate(employee: any): void {
-    console.log('Update clicked for:', employee);
-    // Navigate to update form or open dialog
+  onUpdate(employee_id: any): void {
+    this.router.navigate(['/employees/update/' + employee_id])
   }
 
   onDelete(employee: any): void {
