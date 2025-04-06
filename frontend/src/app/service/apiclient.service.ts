@@ -45,4 +45,30 @@ export class ApiclientService {
     }).pipe(map((result: any) => result.data))
   }
 
+  getAllEmployees(): Observable<any[]> {
+    return this.apollo.watchQuery<any>({
+      query: gql`
+      query GetAllEmployees {
+        getAllEmployees {
+          _id
+          firstname
+          lastname
+          email
+          gender
+          designation
+          salary
+          date_of_joining
+          department
+          employee_photo
+          createdAt
+          updatedAt
+        }
+      }
+    `
+    })
+      .valueChanges.pipe(
+        map(result => result.data.getAllEmployees)
+      );
+  }
+
 }
